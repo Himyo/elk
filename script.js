@@ -82,9 +82,6 @@ async function run() {
     });
     console.log(erroredDocuments);
   }
-
-  const { body: count } = await client.count({ index: "tweets" });
-  console.log(count);
 }
 
 run().catch(console.log);
