@@ -5,7 +5,8 @@
   "main": "script.js",
   "dependencies": {
     "@elastic/elasticsearch": "^7.7.1",
-    "array.prototype.flatmap": "^1.2.3"
+    "array.prototype.flatmap": "^1.2.3",
+    "twit": "^2.2.11"
   },
   "devDependencies": {
     "csvtojson": "^2.0.10"
