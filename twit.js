@@ -8,30 +8,24 @@ const T = new Twit({
   access_token_secret: "Vv7jUoiDjy7ZwpdD0dhkA9SHQrE9MAQ11uT7KuZ8QhELK",
 });
 
-// for (let index = 0; index < 1; index++) {
-let lastId = null;
-// const locUsa = "39.293281,-100.658108,1900km";
-// const locFrance = "46.693822,2.242383,553.49km";
+let sinceId = null;
 const getData = async (location, sinceId) => {
   return T.get("search/tweets", {
     q: "#ps5 since:2020-06-11",
     count: 100,
     geocode: location,
-    since_id: sinceId
-  }).then((result) =>{
-    if(!lastId) {
-      let array = [];
-      result.data[Object.keys(result.data)[0]].forEach((value) => {
-        array.push(value.id);
-        return array;
-      });
-      lastId = array.slice(-1).pop();
-    }
+    since_id: sinceId,
+  }).then((result) => {
+    let array = [];
+    result.data[Object.keys(result.data)[0]].forEach((value) => {
+      array.push(value.id);
+      return array;
+    });
+    sinceId = array.slice(-1).pop();
+    console.log(sinceId);
     return result.data;
   });
 };
-
-// }
 
 const restructuredObject = (data, country) => {
   let array = [];
@@ -44,11 +38,18 @@ const restructuredObject = (data, country) => {
 };
 
 const writeFile = async () => {
-  const USADataset = await getData("39.293281,-100.658108,1900km", lastId);
-  const FRDataSet = await getData("46.693822,2.242383,553.49km", lastId);
+  const USADataset = await getData("39.293281,-100.658108,1900km", 1278177055918694400);
+  const FRDataSet = await getData("46.693822,2.242383,553.49km", 1278192703574904800);
   fs.writeFileSync(
     "./data/tweets.json",
-    JSON.stringify([...restructuredObject(USADataset, "USA"), ...restructuredObject(FRDataSet, "FR")], null, "\t"),
+    JSON.stringify(
+      [
+        ...restructuredObject(USADataset, "USA"),
+        ...restructuredObject(FRDataSet, "FR"),
+      ],
+      null,
+      "\t"
+    ),
     { flag: "a" }
   );
 };

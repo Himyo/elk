@@ -1,38 +1,11 @@
 const csv = require("csvtojson");
 const fs = require("fs");
 require("array.prototype.flatmap").shim();
-const twitScript = require("twit");
 
 const { Client } = require("@elastic/elasticsearch");
 const client = new Client({
   node: "http://localhost:9200",
 });
-
-const parsedCsv = async () => {
-  csv({
-    delimiter: ";",
-    headers: [
-      "title",
-      "seo_title",
-      "url",
-      "author",
-      "date",
-      "category",
-      "locales",
-      "content",
-    ],
-    alwaysSplitAtEOL: true,
-    noheader: true,
-  })
-    .fromFile("./data/data.csv")
-    .then((jsonArrayObj) => {
-      fs.writeFileSync(
-        "./data/data.json",
-        JSON.stringify(jsonArrayObj, null, 2)
-      );
-      return jsonArrayObj;
-    });
-};
 
 async function run() {
   await client.indices.create(
@@ -56,7 +29,7 @@ async function run() {
   const dataset = JSON.parse(buffer.toString());
 
   const body = dataset.flatMap((doc) => [
-    { index: { _index: "groupe7" } },
+    { index: { _index: "tweetos" } },
     doc,
   ]);
 
