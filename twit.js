@@ -33,12 +33,12 @@ const getData = async (location, sinceId) => {
 
 // }
 
-const restructuredObject = (data) => {
+const restructuredObject = (data, country) => {
   let array = [];
   data[Object.keys(data)[0]].forEach((value) => {
     const { text, user } = value;
     const { location: userLocation } = user;
-    array.push({ text, userLocation });
+    array.push({ text, userLocation, country });
   });
   return array;
 };
@@ -48,7 +48,7 @@ const writeFile = async () => {
   const FRDataSet = await getData("46.693822,2.242383,553.49km", lastId);
   fs.writeFileSync(
     "./data/tweets.json",
-    JSON.stringify([...restructuredObject(USADataset), ...restructuredObject(FRDataSet)], null, "\t"),
+    JSON.stringify([...restructuredObject(USADataset, "USA"), ...restructuredObject(FRDataSet, "FR")], null, "\t"),
     { flag: "a" }
   );
 };
