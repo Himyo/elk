@@ -52,7 +52,7 @@ async function run() {
     { ignore: [400] }
   );
 
-  const buffer = fs.readFileSync('./data/data.json');
+  const buffer = fs.readFileSync('./data/tweets.json');
   const dataset = JSON.parse(buffer.toString());
 
   const body = dataset.flatMap((doc) => [

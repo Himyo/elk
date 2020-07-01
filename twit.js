@@ -18,7 +18,17 @@ const getData = async (location, sinceId) => {
     count: 100,
     geocode: location,
     since_id: sinceId
-  }).then((result) => result.data);
+  }).then((result) =>{
+    if(!lastId) {
+      let array = [];
+      result.data[Object.keys(result.data)[0]].forEach((value) => {
+        array.push(value.id);
+        return array;
+      });
+      lastId = array.slice(-1).pop();
+    }
+    return result.data;
+  });
 };
 
 // }
@@ -38,20 +48,9 @@ const writeFile = async () => {
   const FRDataSet = await getData("46.693822,2.242383,553.49km", lastId);
   fs.writeFileSync(
     "./data/tweets.json",
-    JSON.stringify(restructuredObject(USADataset), null, "\t"),
+    JSON.stringify([...restructuredObject(USADataset), ...restructuredObject(FRDataSet)], null, "\t"),
     { flag: "a" }
   );
-  fs.writeFileSync(
-    "./data/tweets.json",
-    JSON.stringify(restructuredObject(FRDataSet), null, "\t"),
-    { flag: "a" }
-  );
-  //   let array = [];
-  //   result.data[Object.keys(result.data)[0]].forEach((value) => {
-  //     array.push(value.id);
-  //     return array;
-  //   });
-  //   lastId = array.slice(-1).pop();
 };
 
 writeFile();
