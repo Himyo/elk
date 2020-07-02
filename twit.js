@@ -3,7 +3,7 @@ const fs = require("fs");
 const config = require("./config");
 const T = new Twit(config);
 
-const getData = async (location, sinceId) => {
+const getData = async (location, sinceId = null) => {
   return T.get("search/tweets", {
     q: "#ps5 since:2020-06-11",
     count: 100,
